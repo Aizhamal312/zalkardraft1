@@ -69,6 +69,8 @@ export interface GalleryItemConfig {
 export interface SiteConfig {
   whatsappNumber: string;
   phone: string;
+  whatsappNumber2?: string;
+  phone2?: string;
   email: string;
   instagram: string;
   heroImage: string;

@@ -116,7 +116,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       };
     }
     if (SITE_CONFIG.mapLink) schemaData.hasMap = SITE_CONFIG.mapLink;
-    if (SITE_CONFIG.phone) schemaData.telephone = SITE_CONFIG.phone;
+    const phones = [SITE_CONFIG.phone, SITE_CONFIG.phone2].filter(Boolean);
+    if (phones.length === 1) schemaData.telephone = phones[0];
+    else if (phones.length > 1) schemaData.telephone = phones;
     if (SITE_CONFIG.email) schemaData.email = SITE_CONFIG.email;
     if (SITE_CONFIG.heroImage) {
       schemaData.image = new URL(SITE_CONFIG.heroImage, window.location.href).href;
@@ -131,43 +133,23 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // Footer contact items
   const footerContactItems: {
-    icon: string;
+    key: string;
     label: string;
-    value: string;
     href: string;
     ext?: boolean;
   }[] = [
     {
-      icon: 'wa',
-      label: t('contact.whatsapp'),
-      value: SITE_CONFIG.phone || t('contact.waText'),
-      href: waLink(t('wa.general')),
+      key: 'wa-1',
+      label: `WhatsApp 1: ${SITE_CONFIG.phone || SITE_CONFIG.whatsappNumber}`,
+      href: waLink(t('wa.general'), SITE_CONFIG.whatsappNumber),
       ext: true,
     },
   ];
-  if (SITE_CONFIG.phone) {
+  if (SITE_CONFIG.whatsappNumber2) {
     footerContactItems.push({
-      icon: 'phone',
-      label: t('contact.phone'),
-      value: SITE_CONFIG.phone,
-      href: 'tel:' + String(SITE_CONFIG.phone).replace(/[^\d+]/g, ''),
-    });
-  }
-  if (SITE_CONFIG.email) {
-    footerContactItems.push({
-      icon: 'mail',
-      label: t('contact.email'),
-      value: SITE_CONFIG.email,
-      href: 'mailto:' + SITE_CONFIG.email,
-    });
-  }
-  if (SITE_CONFIG.instagram) {
-    const handle = '@' + String(SITE_CONFIG.instagram).replace(/\/+$/, '').split('/').pop();
-    footerContactItems.push({
-      icon: 'insta',
-      label: t('contact.instagram'),
-      value: handle,
-      href: SITE_CONFIG.instagram,
+      key: 'wa-2',
+      label: `WhatsApp 2: ${SITE_CONFIG.phone2 || SITE_CONFIG.whatsappNumber2}`,
+      href: waLink(t('wa.general'), SITE_CONFIG.whatsappNumber2),
       ext: true,
     });
   }
@@ -338,17 +320,16 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <h4>{t('footer.contact')}</h4>
             <ul className="footer-links" id="footer-contacts">
               {footerContactItems.map((it) => (
-                <li key={it.icon}>
+                <li key={it.key}>
                   <a
                     href={it.href}
                     target={it.ext ? '_blank' : undefined}
                     rel={it.ext ? 'noopener noreferrer' : undefined}
                   >
-                    {it.icon === 'wa' ? it.label : it.value}
+                    {it.label}
                   </a>
                 </li>
               ))}
-              <li>{t('loc.address')}</li>
             </ul>
           </div>
         </div>

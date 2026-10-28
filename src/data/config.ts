@@ -3,6 +3,8 @@ import { SiteConfig } from '../types';
 export const SITE_CONFIG: SiteConfig = {
   whatsappNumber: '996705554708',
   phone: '+996 705 554 708',
+  whatsappNumber2: '996703554708',
+  phone2: '+996 703 554 708',
   email: '',
   instagram: '',
 

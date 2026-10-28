@@ -8,7 +8,7 @@ interface LanguageContextValue {
   setLang: (next: Language) => void;
   t: (key: string, vars?: Record<string, string | number>) => string;
   L: (v: LocalizedValue) => string | string[] | null;
-  waLink: (text: string) => string;
+  waLink: (text: string, customNumber?: string) => string;
   fmtDate: (v: string) => string;
 }
 
@@ -87,9 +87,12 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const waNumber = String(SITE_CONFIG.whatsappNumber || '').replace(/\D/g, '');
   const waLink = useCallback(
-    (text: string): string => {
+    (text: string, customNumber?: string): string => {
+      const target = customNumber
+        ? String(customNumber).replace(/\D/g, '')
+        : waNumber;
       const q = 'text=' + encodeURIComponent(text);
-      return waNumber.length >= 8 ? `https://wa.me/${waNumber}?${q}` : `https://wa.me/?${q}`;
+      return target.length >= 8 ? `https://wa.me/${target}?${q}` : `https://wa.me/?${q}`;
     },
     [waNumber]
   );

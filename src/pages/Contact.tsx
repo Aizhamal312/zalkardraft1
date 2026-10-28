@@ -75,6 +75,7 @@ export const Contact: React.FC = () => {
 
   // Direct contact items
   const contactItems: {
+    key: string;
     icon: IconName;
     label: string;
     value: string;
@@ -82,36 +83,21 @@ export const Contact: React.FC = () => {
     ext?: boolean;
   }[] = [
     {
+      key: 'wa-1',
       icon: 'wa',
-      label: t('contact.whatsapp'),
+      label: 'WhatsApp 1',
       value: SITE_CONFIG.phone || t('contact.waText'),
-      href: waLink(t('wa.general')),
+      href: waLink(t('wa.general'), SITE_CONFIG.whatsappNumber),
       ext: true,
     },
   ];
-  if (SITE_CONFIG.phone) {
+  if (SITE_CONFIG.whatsappNumber2) {
     contactItems.push({
-      icon: 'phone',
-      label: t('contact.phone'),
-      value: SITE_CONFIG.phone,
-      href: 'tel:' + String(SITE_CONFIG.phone).replace(/[^\d+]/g, ''),
-    });
-  }
-  if (SITE_CONFIG.email) {
-    contactItems.push({
-      icon: 'mail',
-      label: t('contact.email'),
-      value: SITE_CONFIG.email,
-      href: 'mailto:' + SITE_CONFIG.email,
-    });
-  }
-  if (SITE_CONFIG.instagram) {
-    const handle = '@' + String(SITE_CONFIG.instagram).replace(/\/+$/, '').split('/').pop();
-    contactItems.push({
-      icon: 'insta',
-      label: t('contact.instagram'),
-      value: handle,
-      href: SITE_CONFIG.instagram,
+      key: 'wa-2',
+      icon: 'wa',
+      label: 'WhatsApp 2',
+      value: SITE_CONFIG.phone2 || SITE_CONFIG.whatsappNumber2,
+      href: waLink(t('wa.general'), SITE_CONFIG.whatsappNumber2),
       ext: true,
     });
   }
@@ -240,7 +226,7 @@ export const Contact: React.FC = () => {
               <h3 id="direct-title">{t('contact.directTitle')}</h3>
               <ul className="contact-list" id="contact-list">
                 {contactItems.map((it) => (
-                  <li key={it.icon}>
+                  <li key={it.key}>
                     <a
                       href={it.href}
                       target={it.ext ? '_blank' : undefined}
